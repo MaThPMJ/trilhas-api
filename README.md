@@ -102,6 +102,8 @@ Listas vazias respondem 200 com `[]`. Todo erro tem corpo JSON no formato `{ "er
   dotnet tool install --global dotnet-ef --version 8.0.*
   ```
 
+  Se a ferramenta já estiver instalada em outra versão, use `dotnet tool update --global dotnet-ef --version 8.0.*`.
+
 - Acesso ao Oracle da FIAP (usuário e senha).
 
 ### Passo a passo
@@ -113,7 +115,7 @@ Listas vazias respondem 200 com `[]`. Todo erro tem corpo JSON no formato `{ "er
    cd trilhas-api
    ```
 
-2. Configure a connection string. A senha fica fora do repositório: o `appsettings.json` traz apenas um valor de exemplo, e o valor real é guardado pelo `user-secrets` na sua máquina.
+2. Configure a connection string. A senha fica fora do repositório: o `appsettings.json` traz apenas um valor de exemplo, e o valor real é guardado pelo `user-secrets` na sua máquina. O user-secrets é lido quando a API roda em ambiente Development, caso do `dotnet run --launch-profile http`; fora dele, vale a variável de ambiente.
 
    ```bash
    dotnet user-secrets set "ConnectionStrings:OracleConnection" "User Id=SEU_RM;Password=SUA_SENHA;Data Source=oracle.fiap.com.br:1521/ORCL"
