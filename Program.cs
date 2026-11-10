@@ -65,8 +65,6 @@ if (app.Environment.IsDevelopment())
         options.WithOpenApiRoutePattern("/swagger/{documentName}/swagger.json"));
 }
 
-app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
