@@ -23,7 +23,7 @@ public class Trilha
     public Trilha(string titulo, string? descricao, Tema tema, int nivel)
     {
         Definir(titulo, descricao, tema, nivel);
-        DataCriacao = DateTime.UtcNow;
+        DataCriacao = DateTime.Now;
     }
 
     public void Atualizar(string titulo, string? descricao, Tema tema, int nivel)
