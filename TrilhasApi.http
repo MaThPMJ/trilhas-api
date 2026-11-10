@@ -1,1 +1,226 @@
-@TrilhasApi_HostAddress = http://localhost:5099
+@baseUrl = http://localhost:5099
+
+########## TRILHAS — sucesso ##########
+
+### Lista todas as trilhas (200)
+# @name listarTrilhas
+GET {{baseUrl}}/api/trilhas
+Accept: application/json
+
+### Cria uma trilha (201)
+# @name criarTrilha
+POST {{baseUrl}}/api/trilhas
+Content-Type: application/json
+
+{
+  "titulo": "Trilha de Teste",
+  "descricao": "Criada pelo arquivo de testes.",
+  "tema": "JUROS",
+  "nivel": 2
+}
+
+### Busca a trilha criada (200)
+# @name obterTrilha
+GET {{baseUrl}}/api/trilhas/{{criarTrilha.response.body.$.id}}
+Accept: application/json
+
+### Atualiza a trilha criada (204)
+# @name atualizarTrilha
+PUT {{baseUrl}}/api/trilhas/{{criarTrilha.response.body.$.id}}
+Content-Type: application/json
+
+{
+  "titulo": "Trilha de Teste Atualizada",
+  "descricao": null,
+  "tema": "POUPANCA",
+  "nivel": 3
+}
+
+### Lista os desafios da trilha criada (200)
+# @name listarDesafiosDaTrilha
+GET {{baseUrl}}/api/trilhas/{{criarTrilha.response.body.$.id}}/desafios
+Accept: application/json
+
+########## DESAFIOS — sucesso ##########
+
+### Lista todos os desafios (200)
+# @name listarDesafios
+GET {{baseUrl}}/api/desafios
+Accept: application/json
+
+### Lista os desafios filtrando por trilha (200)
+# @name listarDesafiosPorTrilha
+GET {{baseUrl}}/api/desafios?trilhaId={{criarTrilha.response.body.$.id}}
+Accept: application/json
+
+### Cria um desafio na trilha criada (201)
+# @name criarDesafio
+POST {{baseUrl}}/api/desafios
+Content-Type: application/json
+
+{
+  "trilhaId": {{criarTrilha.response.body.$.id}},
+  "pergunta": "Qual destas opções ajuda a pagar menos juros?",
+  "alternativaA": "Pagar a fatura inteira",
+  "alternativaB": "Pagar só o mínimo",
+  "alternativaC": "Atrasar o pagamento",
+  "alternativaD": "Usar o cheque especial",
+  "respostaCorreta": "a",
+  "pontos": 15
+}
+
+### Busca o desafio criado (200)
+# @name obterDesafio
+GET {{baseUrl}}/api/desafios/{{criarDesafio.response.body.$.id}}
+Accept: application/json
+
+### Atualiza o desafio criado (204)
+# @name atualizarDesafio
+PUT {{baseUrl}}/api/desafios/{{criarDesafio.response.body.$.id}}
+Content-Type: application/json
+
+{
+  "trilhaId": {{criarTrilha.response.body.$.id}},
+  "pergunta": "Qual destas opções ajuda a pagar menos juros no cartão?",
+  "alternativaA": "Pagar a fatura inteira",
+  "alternativaB": "Pagar só o mínimo",
+  "alternativaC": "Atrasar o pagamento",
+  "alternativaD": "Usar o cheque especial",
+  "respostaCorreta": "A",
+  "pontos": 25
+}
+
+### Remove o desafio criado (204)
+# @name removerDesafio
+DELETE {{baseUrl}}/api/desafios/{{criarDesafio.response.body.$.id}}
+
+### Remove a trilha criada (204)
+# @name removerTrilha
+DELETE {{baseUrl}}/api/trilhas/{{criarTrilha.response.body.$.id}}
+
+########## Dados inválidos — 400 ##########
+
+### Trilha com título curto (400)
+# @name criarTrilhaTituloCurto
+POST {{baseUrl}}/api/trilhas
+Content-Type: application/json
+
+{
+  "titulo": "ab",
+  "descricao": "Título com menos de 3 caracteres.",
+  "tema": "JUROS",
+  "nivel": 1
+}
+
+### Trilha com tema inválido (400)
+# @name criarTrilhaTemaInvalido
+POST {{baseUrl}}/api/trilhas
+Content-Type: application/json
+
+{
+  "titulo": "Trilha com tema inválido",
+  "descricao": null,
+  "tema": "INVESTIMENTO",
+  "nivel": 1
+}
+
+### Desafio com resposta correta "E" (400)
+# @name criarDesafioRespostaInvalida
+POST {{baseUrl}}/api/desafios
+Content-Type: application/json
+
+{
+  "trilhaId": 1,
+  "pergunta": "Qual é a resposta desta pergunta de teste?",
+  "alternativaA": "Primeira",
+  "alternativaB": "Segunda",
+  "alternativaC": "Terceira",
+  "alternativaD": "Quarta",
+  "respostaCorreta": "E",
+  "pontos": 10
+}
+
+### Desafio com alternativas repetidas — regra de domínio (400)
+# @name criarDesafioAlternativasRepetidas
+POST {{baseUrl}}/api/desafios
+Content-Type: application/json
+
+{
+  "trilhaId": 1,
+  "pergunta": "Qual é a resposta desta pergunta de teste?",
+  "alternativaA": "Repetida",
+  "alternativaB": "Repetida",
+  "alternativaC": "Terceira",
+  "alternativaD": "Quarta",
+  "respostaCorreta": "A",
+  "pontos": 10
+}
+
+### Desafio com trilha inexistente (400)
+# @name criarDesafioTrilhaInexistente
+POST {{baseUrl}}/api/desafios
+Content-Type: application/json
+
+{
+  "trilhaId": 99999,
+  "pergunta": "Qual é a resposta desta pergunta de teste?",
+  "alternativaA": "Primeira",
+  "alternativaB": "Segunda",
+  "alternativaC": "Terceira",
+  "alternativaD": "Quarta",
+  "respostaCorreta": "A",
+  "pontos": 10
+}
+
+########## Id inexistente — 404 ##########
+
+### Busca trilha inexistente (404)
+# @name obterTrilhaInexistente
+GET {{baseUrl}}/api/trilhas/99999
+Accept: application/json
+
+### Atualiza trilha inexistente (404)
+# @name atualizarTrilhaInexistente
+PUT {{baseUrl}}/api/trilhas/99999
+Content-Type: application/json
+
+{
+  "titulo": "Trilha inexistente",
+  "descricao": null,
+  "tema": "CONSUMO",
+  "nivel": 1
+}
+
+### Remove trilha inexistente (404)
+# @name removerTrilhaInexistente
+DELETE {{baseUrl}}/api/trilhas/99999
+
+### Lista desafios de trilha inexistente (404)
+# @name listarDesafiosDeTrilhaInexistente
+GET {{baseUrl}}/api/trilhas/99999/desafios
+Accept: application/json
+
+### Busca desafio inexistente (404)
+# @name obterDesafioInexistente
+GET {{baseUrl}}/api/desafios/99999
+Accept: application/json
+
+### Atualiza desafio inexistente (404)
+# @name atualizarDesafioInexistente
+PUT {{baseUrl}}/api/desafios/99999
+Content-Type: application/json
+
+{
+  "trilhaId": 1,
+  "pergunta": "Qual é a resposta desta pergunta de teste?",
+  "alternativaA": "Primeira",
+  "alternativaB": "Segunda",
+  "alternativaC": "Terceira",
+  "alternativaD": "Quarta",
+  "respostaCorreta": "A",
+  "pontos": 10
+}
+
+### Remove desafio inexistente (404)
+# @name removerDesafioInexistente
+DELETE {{baseUrl}}/api/desafios/99999
