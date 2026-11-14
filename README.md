@@ -117,8 +117,8 @@ A validação acontece em duas camadas: Data Annotations nos DTOs de entrada e r
 1. Clone o repositório e entre na pasta:
 
    ```bash
-   git clone https://github.com/MaThPMJ/trilhas-api.git
-   cd trilhas-api
+   git clone https://github.com/grana-amiga/Advanced-Business-Development-with-.NET.git
+   cd Advanced-Business-Development-with-.NET
    ```
 
 2. Configure a connection string. A senha fica fora do repositório: o `appsettings.json` traz apenas um valor de exemplo, e o valor real é guardado pelo `user-secrets` na sua máquina. O user-secrets é lido quando a API roda em ambiente Development, caso do `dotnet run --launch-profile http`; fora dele, vale a variável de ambiente.
