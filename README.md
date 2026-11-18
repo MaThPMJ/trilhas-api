@@ -344,4 +344,4 @@ SELECT t.ID,
 
 ## Vídeo
 
-[LINK DO VÍDEO]
+https://youtu.be/kslbIwXLpRo
